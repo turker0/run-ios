@@ -46,12 +46,7 @@ function start() {
         }
       }
 
-      choices.sort(function (a, b) {
-        return b.localeCompare(a, undefined, {
-          numeric: true,
-          sensitivity: "base",
-        });
-      });
+      choices.sort();
 
       inquirer
         .prompt([
