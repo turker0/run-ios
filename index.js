@@ -41,17 +41,11 @@ function start() {
       for (const key of Object.keys(json.devices)) {
         if (key.startsWith("com.apple.CoreSimulator.SimRuntime.iOS")) {
           for (const device of json.devices[key]) {
-            choices.push(device.name);
+            if (device.name.includes("iPhone") && !device.name.includes("SE"))
+              choices.push(device.name);
           }
         }
       }
-
-      choices = choices
-        .map((e) => {
-          if (e.includes("iPhone") && !e.includes("SE")) return e;
-        })
-        .filter(Boolean)
-        .sort((a, b) => b.localeCompare(a, "en", { sensitivity: "base" }));
 
       inquirer
         .prompt([
@@ -59,7 +53,9 @@ function start() {
             type: "list",
             name: "device",
             message: "Quick React-Native Run-IOS",
-            choices,
+            choices: choices.sort((a, b) =>
+              b.localeCompare(a, "en", { sensitivity: "base" })
+            ),
           },
         ])
         .then(({ device }) =>
