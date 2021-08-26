@@ -34,10 +34,13 @@ function start() {
       for (const key of Object.keys(json.devices)) {
         if (key.startsWith("com.apple.CoreSimulator.SimRuntime.iOS")) {
           for (const device of json.devices[key]) {
-            choices.push(device.name);
+            if (device.name.includes("iPhone") && !device.name.includes("SE"))
+              choices.push(device.name);
           }
         }
       }
+
+      choices.reverse();
 
       inquirer
         .prompt([
@@ -45,15 +48,23 @@ function start() {
             type: "list",
             name: "device",
             message: "Quick React-Native Run-IOS",
-            choices,
+            choices: ["Real Device", ...choices],
           },
         ])
-        .then(({ device }) =>
-          spawn("npx", [`react-native`, `run-ios`, `--simulator="${device}"`], {
-            stdio: "inherit",
-            shell: true,
-          })
-        );
+        .then(({ device }) => {
+          if (device == "Real Device") {
+            spawn("npx", [`react-native`, `run-ios`, `--device`], {
+              stdio: "inherit",
+              shell: true,
+            });
+          } else {
+            spawn(
+              "npx",
+              [`react-native`, `run-ios`, `--simulator="${device}"`],
+              { stdio: "inherit", shell: true }
+            );
+          }
+        });
     });
   } else {
     console.log("Sorry, run-ios is not supported with your operating system");
