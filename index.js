@@ -46,7 +46,12 @@ function start() {
         }
       }
 
-      choices.sort();
+      choices = choices
+        .map((e) => {
+          if (e.includes("iPhone") && !e.includes("SE")) return e;
+        })
+        .filter(Boolean)
+        .sort((a, b) => b.localeCompare(a, "en", { sensitivity: "base" }));
 
       inquirer
         .prompt([
