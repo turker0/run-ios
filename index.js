@@ -2,13 +2,6 @@
 
 const commander = require("commander");
 
-const Prefered = [
-  "iPhone 12 Pro Max",
-  "iPhone 12 Pro",
-  "iPhone 12",
-  "iPhone 12 mini",
-];
-
 commander
   .version(require("./package.json").version)
   .description("Quick React-Native Run-IOS")
@@ -41,8 +34,7 @@ function start() {
       for (const key of Object.keys(json.devices)) {
         if (key.startsWith("com.apple.CoreSimulator.SimRuntime.iOS")) {
           for (const device of json.devices[key]) {
-            if (device.name.includes("iPhone") && !device.name.includes("SE"))
-              choices.push(device.name);
+            choices.push(device.name);
           }
         }
       }
@@ -53,9 +45,7 @@ function start() {
             type: "list",
             name: "device",
             message: "Quick React-Native Run-IOS",
-            choices: choices.sort((a, b) =>
-              b.localeCompare(a, "en", { sensitivity: "base" })
-            ),
+            choices,
           },
         ])
         .then(({ device }) =>
