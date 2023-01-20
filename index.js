@@ -34,7 +34,7 @@ function start() {
       for (const key of Object.keys(json.devices)) {
         if (key.startsWith("com.apple.CoreSimulator.SimRuntime.iOS")) {
           for (const device of json.devices[key]) {
-            if (device.name.includes("iPhone"))
+            if (device.name.includes("iPhone") && !device.name.includes("SE"))
               choices.push(device.name);
           }
         }
